@@ -1,0 +1,39 @@
+https://leetcode.com/problems/number-of-provinces/
+class Solution {
+public:
+// this function is simple dfs which marks the nodes in the visited
+   void dfs(int node,vector<int> adj[],vector<int> &vis){
+      vis[node]=1;
+      for(auto it:adj[node]){
+        if(!vis[it]){
+            dfs(it,adj,vis);
+        }
+      }
+   }
+    int findCircleNum(vector<vector<int>>& isConnected) {
+        int n=isConnected.size();
+        // this is the right way of declaring a adjacency list and is passed without reference
+        vector<int> adj[n];
+        int ans=0;
+        vector<int> vis(n,0);
+        // creating the adjacency list
+        for(int i=0;i<n;i++){
+            for(int j=0;j<n;j++){
+                if(isConnected[i][j]==1 && i!=j){
+                    adj[i].push_back(j);
+                }
+            }
+        }
+        // 0 se leke n tak k liye dfs call hoga aur agar 0 gaya to wo apne sare connected neighbours
+        // mark kr aaye ga aur unke liye yaha se call nahi jayegi
+        for(int i=0;i<n;i++){
+            if(!vis[i]){
+                ans++;
+                dfs(i,adj,vis);
+            }
+        }
+        return ans;
+               
+    }
+};
+// graph by madhur
