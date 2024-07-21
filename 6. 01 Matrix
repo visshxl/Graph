@@ -1,0 +1,42 @@
+https://leetcode.com/problems/01-matrix/
+class Solution {
+public:
+    vector<vector<int>> updateMatrix(vector<vector<int>>& mat) {
+        int del[]={-1,0,1,0,-1};
+        queue<pair<pair<int, int>, int>> q;
+        int m=mat.size(), n=mat[0].size();
+        vector<vector<int>> ans(m, vector<int>(n, INT_MAX));
+        // first we wil push all the zeroes with dis=0 in the queue
+        for(int i=0; i<m; i++){
+            for(int j=0; j<n; j++){
+                if(mat[i][j]==0){
+                    // marking the zeros with dis=0
+                    ans[i][j]=0;
+                    q.push({{i, j}, 0});
+                }
+            }
+        }
+
+        while(!q.empty()){
+            auto it=q.front();
+            int row=it.first.first;
+            int col=it.first.second;
+            int dis=it.second;
+            q.pop();
+            // pushing min value in the ans matrix
+            ans[row][col]=min(dis, ans[row][col]);
+            for(int i=0; i<4; i++){
+                int nrow=row+del[i];
+                int ncol=col+del[i+1];
+                if(nrow>=0 && ncol>=0 && nrow<m && ncol<n){
+                    if(mat[nrow][ncol]==1 && ans[nrow][ncol]>dis+1){
+                        // pushing the new 1 with dis+1
+                        q.push({{nrow, ncol}, dis+1});
+                    }
+                }
+            }
+        }
+        return ans;
+    }
+};
+// graph by madhur
