@@ -1,0 +1,28 @@
+https://leetcode.com/problems/is-graph-bipartite/
+class Solution {
+public:
+    bool dfs(int node, bool color, vector<vector<int>>& graph, vector<int>& vis, vector<bool>& colors){
+        vis[node]=1;
+        colors[node]=color; // arary me har ek node ko color dete jare hai
+
+        for(auto it:graph[node]){
+            if(!vis[it]){
+                if(!dfs(it, !color, graph, vis, colors)) return false;
+            }else if(color==colors[it]) return false; // agar adjacent element visited hai and also
+            // usi color se colored hai jo color hmne present node ko diya hai to return false
+        }
+        return true;
+    }
+
+    bool isBipartite(vector<vector<int>>& graph) {
+        vector<int> vis(graph.size(), 0);
+        vector<bool> colors(graph.size());
+        for(int i=0;i<graph.size();i++)
+        { 
+        if(!vis[i] && !dfs(i, 0,graph, vis, colors))
+             return false;
+        }
+        return true;
+    }
+};
+// graph by madhur sir
