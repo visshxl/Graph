@@ -1,0 +1,36 @@
+https://leetcode.com/problems/word-ladder/
+class Solution {
+public:
+    int ladderLength(string beginWord, string endWord, vector<string>& wordList) {
+        queue<pair<string, int>> q;
+        set<string> st;
+        // puri wordlist ko ek set me insert krlia taki bad me check kr skey easily ki jo
+        // naya word generate hua hai wo wordlist me exist karta hai ya nhi
+        for(auto it:wordList) st.insert(it);
+        // pehla word queue me dal diya with level as 1;
+        q.push({beginWord, 1});
+        // aur erase krdia, agar list me hua to erase ho jayega nhi to koi nhi;
+        st.erase(beginWord);
+        while(!q.empty()){ // bfs
+            string temp=q.front().first;
+            int level=q.front().second;
+            q.pop();
+            // ab hum temp k har index k liye a-z word dalenge aur check krege ki kya wo 
+            // character change krke koi naya word milra hai jo wordlist me hai
+            for(int i=0; i<temp.size(); i++){
+                string temp2= temp; // storing the original temp value
+                for(char a='a'; a<='z'; a++){
+                    temp2[i]=a; // changing the value of char with each possible value
+                    if(st.find(temp2)!=st.end()){ // is present in wordlist?
+                        if(temp2==endWord) return level+1; //return if word is our target
+                        q.push({temp2, level+1});// else push the word in q with lvl+1
+                        st.erase(temp2);// and erase the word from the set
+                    }
+                }
+            }
+        }
+        // end word cannot be achieved
+        return 0;
+    }
+};
+// graph by madhur
