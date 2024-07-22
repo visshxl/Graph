@@ -1,0 +1,53 @@
+https://leetcode.com/problems/surrounded-regions/
+class Solution {
+public:
+// intuition:-
+// boundary traversal krenge board matrix ka aur agar boundary pe koi O milta hai matlab
+// wo baki Os jo usse connected hai unhe bacha lega, to hum uske liye dfs call dedenge
+// aur wo jake sare connected Os ko visited mark kar ayega
+// then hum board ko iterate krenge aur jo O unvisited hoga usey hum X se change krdenge
+    void dfs(int row, int col, vector<vector<int>>& vis, vector<vector<char>>& grid){
+        vis[row][col]=1;
+
+        int del[]={-1, 0, 1, 0, -1};
+        for(int i=0; i<4; i++){
+            int nrow=row+del[i];
+            int ncol=col+del[i+1];
+            if(nrow>=0 && ncol>=0 && nrow<grid.size() && ncol<grid[0].size()){
+                if(grid[nrow][ncol]=='O' && !vis[nrow][ncol]){
+                    dfs(nrow, ncol, vis, grid);
+                }
+            }
+        }
+    }
+
+    void solve(vector<vector<char>>& board) {
+        int m=board.size(), n=board[0].size();
+        vector<vector<int>> vis(m, vector<int>(n, 0));
+        // top and bottom row traversal
+        for(int i=0; i<n; i++){
+            if(board[0][i]=='O'){
+                dfs(0, i, vis, board);
+            }
+            if(board[m-1][i]=='O'){
+                dfs(m-1, i, vis, board);
+            }
+        }
+        // first and last column traversal
+        for(int i=1; i<m-1; i++){
+            if(board[i][0]=='O'){
+                dfs(i, 0, vis, board);
+            }
+            if(board[i][n-1]=='O'){
+                dfs(i, n-1, vis, board);
+            }
+        }
+
+        for(int i=0; i<m; i++){
+            for(int j=0; j<n; j++){
+                if(vis[i][j]==0 && board[i][j]=='O') board[i][j]='X';
+            }
+        }
+    }
+};
+// graph by madhur
