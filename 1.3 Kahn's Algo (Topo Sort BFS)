@@ -1,0 +1,32 @@
+https://www.geeksforgeeks.org/problems/topological-sort/1
+//Kahn's Algorithm
+	vector<int> topoSort(int V, vector<int> adj[]) 
+	{
+	    int inDegree[V]={0};
+	    queue<int> q;
+	   // making the in deg vector that will store the cnt of incoming nodes to each node
+	    for(int i=0; i<V; i++){
+	        for(auto it:adj[i]){
+	            inDegree[it]++;
+	        }
+	    }
+	   // pushing all the nodes with in degree 0 to the q
+	    for(int i=0; i<V; i++){
+	        if(!inDegree[i]) q.push(i);
+	    }
+	    vector<int> ans;
+	    while(!q.empty()){
+	        int node=q.front();
+	        q.pop();
+	       // pushing the element to the ans
+	        ans.push_back(node);
+	        for(auto it:adj[node]){
+	           // doing the bfs and removing the indegree cnt
+	            inDegree[it]--;
+	            // pushing the new nodes with in degree cnt == 0
+	            if(!inDegree[it]) q.push(it);
+	        }
+	    }
+	    return ans;
+	}
+};
